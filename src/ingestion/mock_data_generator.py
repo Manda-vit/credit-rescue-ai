@@ -4,7 +4,7 @@ import random
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# --- CONFIGURAÇÕES GLOBAIS ---
+# --- GLOBAL CONFIGURATIONS ---
 np.random.seed(42)
 random.seed(42)
 
@@ -13,11 +13,11 @@ NUM_APPLICATIONS = 8000
 NUM_BRANCHES = 50
 OUTPUT_DIR = Path('data/raw')
 
-# Garantir que o diretório de saída exista
+# Ensure output directory exists
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 def generate_branches(num_branches: int) -> pd.DataFrame:
-    """Gera o mock de dados das agências bancárias."""
+    """Generates mock data for bank branches."""
     return pd.DataFrame({
         'branch_id': [f'BR_{str(i).zfill(3)}' for i in range(1, num_branches + 1)],
         'region': np.random.choice(['North', 'South', 'East', 'West', 'Central'], num_branches),
@@ -25,7 +25,7 @@ def generate_branches(num_branches: int) -> pd.DataFrame:
     })
 
 def generate_clients(num_clients: int) -> pd.DataFrame:
-    """Gera o mock de dados demográficos dos clientes."""
+    """Generates mock demographic data for clients."""
     employment_types = ['Salaried', 'Gig-worker', 'Self-employed', 'Unemployed', 'Business Owner']
     segments = ['Mass', 'Mass-Affluent', 'Premium', 'Private']
 
@@ -38,53 +38,53 @@ def generate_clients(num_clients: int) -> pd.DataFrame:
     })
 
 def determine_status_and_reason(employment: str) -> pd.Series:
-    """Aplica as regras de negócio de concessão e recusa baseadas no perfil de emprego."""
-    if np.random.rand() > 0.45:  # 55% de aprovação global
+    """Applies business rules for credit approval based on employment profile."""
+    if np.random.rand() > 0.45:  # 55% global approval rate
         return pd.Series(['Approved', 'None'])
     
     if employment in ['Gig-worker', 'Self-employed']:
         reason = np.random.choice([
-            'Renda - Autonomo sem constancia de movimentacao',
-            'Renda - Falta de declaracao de IR',
-            'Score - Cadastro Positivo desativado',
-            'Enquadramento - Comprometimento de renda > 30%'
+            'Income - Gig Worker with Inconsistent Cash Flow',
+            'Income - Missing Tax Return',
+            'Score - Disabled Positive Credit Registry',
+            'Policy - Debt-to-Income (DTI) > 30%'
         ], p=[0.4, 0.2, 0.2, 0.2])
     else:
         reason = np.random.choice([
-            'Erro Cadastral - Dados divergentes com Receita',
-            'Erro Documental - CNH/RG vencido ou ilegivel',
-            'Score - Divida esquecida (Baixo valor)',
-            'Restricao - Prejuizo historico no SCR',
-            'Enquadramento - Comprometimento de renda > 30%'
+            'Registry Error - Data Mismatch with Tax Authority',
+            'Document Error - Expired or Illegible ID',
+            'Score - Forgotten Micro-Debt',
+            'Restriction - Historical Default on Central Bank SCR',
+            'Policy - Debt-to-Income (DTI) > 30%'
         ], p=[0.2, 0.2, 0.2, 0.1, 0.3])
         
     return pd.Series(['Denied', reason])
 
 def generate_applications(num_applications: int, clients_df: pd.DataFrame, branches_df: pd.DataFrame) -> pd.DataFrame:
-    """Gera o histórico de propostas de crédito baseando-se nos clientes e agências existentes."""
+    """Generates the credit application history based on existing clients and branches."""
     
-    # Amostrar clientes aleatórios para criar as propostas
+    # Sample random clients to create applications
     apps_df = clients_df[['client_id', 'employment_type']].sample(n=num_applications, replace=True).reset_index(drop=True)
     
     apps_df['application_id'] = [f'APP_{str(i).zfill(6)}' for i in range(1, num_applications + 1)]
     apps_df['branch_id'] = np.random.choice(branches_df['branch_id'], num_applications)
     apps_df['requested_amount'] = np.round(np.random.uniform(1000, 50000, num_applications), 2)
     
-    # Gerar datas aleatórias nos últimos 180 dias de forma vetorizada
+    # Generate random dates in the last 180 days (vectorized approach)
     random_days = np.random.randint(0, 180, num_applications)
     base_date = datetime.now()
     apps_df['application_date'] = [(base_date - timedelta(days=int(d))).strftime('%Y-%m-%d') for d in random_days]
 
-    # Aplicar as regras de aprovação/reprovação
+    # Apply approval/rejection rules
     status_reason_df = apps_df['employment_type'].apply(determine_status_and_reason)
     apps_df[['status', 'rejection_reason']] = status_reason_df
 
-    # Remover a coluna auxiliar de emprego antes de retornar e reordenar as colunas
+    # Clean up and reorder columns
     apps_df = apps_df.drop(columns=['employment_type'])
     return apps_df[['application_id', 'client_id', 'branch_id', 'requested_amount', 'status', 'rejection_reason', 'application_date']]
 
 def main():
-    """Função principal que orquestra a geração de dados."""
+    """Main function that orchestrates data generation."""
     print("Building massive mock dataset (Clean Code Architecture)...")
     
     branches = generate_branches(NUM_BRANCHES)
