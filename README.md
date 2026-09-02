@@ -1,10 +1,10 @@
-# 🏦 Credit Rescue AI & Multi-Agent Engine
+##Credit Rescue AI & Multi-Agent Engine
 
 An intelligent system that automates credit recovery and banking relationship management, transforming denied credit applications into win-win business opportunities through a layered data architecture and AI agents.
 
 ---
 
-## ⚙️ Technical Dependencies
+## Technical Dependencies
 
 The project is built entirely in **Python**, using lightweight, high-performance libraries for tabular data processing and user interfaces:
 * **Python 3.10+**: Core programming language.
@@ -14,7 +14,7 @@ The project is built entirely in **Python**, using lightweight, high-performance
 
 ---
 
-## 📊 Implemented Business Rules
+## Implemented Business Rules
 
 The project's decision engine simulates real financial market and credit underwriting criteria, divided into the following stages:
 
@@ -34,7 +34,7 @@ The project's decision engine simulates real financial market and credit underwr
 
 ---
 
-## 🚀 How to Run the Project
+## How to Run the Project
 
 1. Install dependencies:
    ```bash
