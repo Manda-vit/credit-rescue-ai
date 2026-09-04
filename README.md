@@ -213,35 +213,8 @@ credit-rescue-ai/
     └── test_agents.py
 ```
 
----
+<img width="1023" height="767" alt="image" src="https://github.com/user-attachments/assets/06f9af71-7ee5-4adf-b35a-427189fcd051" />
 
-## Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-Please ensure your code includes tests and follows PEP 8 style guidelines.
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## Support & Contact
-
-For questions, issues, or feedback:
-- Open an [Issue](https://github.com/Manda-vit/credit-rescue-ai/issues)
-- Contact: [Your Contact Info]
-
----
 
 **Last Updated:** September 2026  
 **Status:** Active Development
